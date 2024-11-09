@@ -1,6 +1,6 @@
-import { Quiz } from '../models/Quiz';
+import { QuizModel } from '../models/QuizModel';
 
-const QUIZ_DATA = <Quiz>[
+const QUIZ_DATA = <QuizModel>[
   {
     id: 'q1',
     text: 'Which of the following definitions best describes React.js?',
