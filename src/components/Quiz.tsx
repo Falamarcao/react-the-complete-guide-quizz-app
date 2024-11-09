@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { Question, Answers } from '../models/Quiz';
 
 import QUIZ_DATA from '../data/questions';
 import Summary from './Summary';
+import QuestionTimer from './QuestionTimer';
 
 const Quiz = () => {
   const [userAnswers, setUserAnswers] = useState<Answers>([]);
@@ -14,16 +15,25 @@ const Quiz = () => {
 
   const isComplete = currentQuestionIndex === QUIZ_DATA.length;
 
-  const handleSelectAnswer = (selectedAnswer: string) => {
+  const handleSelectAnswer = useCallback((selectedAnswer: string) => {
     setUserAnswers((prevAnswers: Answers) => [...prevAnswers, selectedAnswer]);
-  };
+  }, []);
+
+  const handleSkipAnswer = useCallback(
+    () => handleSelectAnswer(''),
+    [handleSelectAnswer]
+  );
 
   if (isComplete) return <Summary />;
 
   return (
     <div id="quiz">
       <div id="question">
-        <progress value={currentQuestionIndex} max={userAnswers.length} />
+        <QuestionTimer
+          key={currentQuestionIndex}
+          timeoutInSecounds={10}
+          onTimeout={handleSkipAnswer}
+        />
         <h2>{question.text}</h2>
       </div>
       <ul id="answers">
